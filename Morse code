@@ -1,0 +1,82 @@
+import Tkinter as tk 
+import RPi.GPIO as GPIO
+import time
+from time import sleep
+
+CODE = {'A': '.-',
+        'B': '-...',
+        'C': '-.-.',
+        'D': '-..',
+        'E': '.',
+        'F': '..-.',
+        'G': '--.',
+        'H': '....',
+        'I': '..',
+        'J': '.---',
+        'K': '-.-',
+        'L': '.-..',
+        'M': '--',
+        'N': '-.',
+        'O': '---',
+        'P': '.--.',
+        'Q': '--.-',
+        'R': '.-.',
+        'S': '...',
+        'T': '-',
+        'U': '..-',
+        'V': '...-',
+        'W': '.--',
+        'X': '-..-',
+        'Y': '-.--',
+        'Z': '--..'}
+       
+LED = 14
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED, GPIO.OUT)
+
+master = tk.Tk()
+master.title("GPIO Control")
+master.geometry("250x250")
+
+def dot():
+        GPIO.output(LED,1)
+        time.sleep(0.2)
+        GPIO.output(LED,0)
+        time.sleep(0.2)
+
+def dash():
+        GPIO.output(LED,1)
+        time.sleep(0.5)
+        GPIO.output(LED,0)
+        time.sleep(0.2)
+
+tk.Label(master, 
+         text="String: ").grid(row=0, column=0)
+
+input = tk.Entry(master)
+input.grid(row=0, column=1)
+x1 = " "
+x2 = 0
+
+def morse_code():
+        global x1
+        global x2
+        x1 = input.get()[:12]
+        for letter in x1:
+                        for symbol in CODE[letter.upper()]:
+                                if symbol == '-':
+                                        dash()
+                                elif symbol == '.':
+                                        dot()
+                                else:
+                                        time.sleep(0.5)
+                        time.sleep(0.5)
+
+SUBMITbutton = tk.Button(master, text="Submit",bg="yellow", command= morse_code)
+SUBMITbutton.grid(row=1, column=1)
+
+EXITbutton = tk.Button(master, text="Exit",bg="red", command=master.destroy)
+EXITbutton.grid(row=2, column=1)
+master.mainloop()
+
